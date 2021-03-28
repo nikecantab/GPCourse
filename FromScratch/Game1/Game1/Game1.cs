@@ -2,51 +2,60 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Game1
+namespace GraphicsProgramming
 {
-    public class Game1 : Game
-    {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+	public class Game1 : Game
+	{
+		private GraphicsDeviceManager _graphics;
+		private SpriteBatch _spriteBatch;
+		private Lesson currentLesson;
 
-        public Game1()
-        {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-        }
+		public Game1()
+		{
+			_graphics = new GraphicsDeviceManager(this);
+			Content.RootDirectory = "Content";
+			IsMouseVisible = true;
 
-        protected override void Initialize()
-        {
-            // TODO: Add your initialization logic here
+			currentLesson = new LiveLesson6();
+		}
 
-            base.Initialize();
-        }
+		protected override void Initialize()
+		{
+			// TODO: Add your initialization logic here
+			currentLesson.Initialize();
 
-        protected override void LoadContent()
-        {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+			_graphics.PreferredBackBufferWidth = 1080;
+			_graphics.PreferredBackBufferHeight = 1080;
+			_graphics.ApplyChanges();
 
-            // TODO: use this.Content to load your game content here
-        }
+			base.Initialize();
+		}
 
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+		protected override void LoadContent()
+		{
+			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: Add your update logic here
+			// TODO: use this.Content to load your game content here
+			currentLesson.LoadContent(Content, _graphics, _spriteBatch);
+		}
 
-            base.Update(gameTime);
-        }
+		protected override void Update(GameTime gameTime)
+		{
+			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+				Exit();
 
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+			// TODO: Add your update logic here
+			currentLesson.Update(gameTime);
+			base.Update(gameTime);
+		}
 
-            // TODO: Add your drawing code here
+		protected override void Draw(GameTime gameTime)
+		{
+			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            base.Draw(gameTime);
-        }
-    }
+			// TODO: Add your drawing code here
+			currentLesson.Draw(gameTime, _graphics, _spriteBatch);
+			base.Draw(gameTime);
+		}
+	}
 }
